@@ -1,0 +1,38 @@
+# Build output
+/build/
+/target/
+/out/
+*.class
+*.jar
+
+# Gradle
+/.gradle/
+
+# IDEs
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.vscode/
+/.settings/
+/.classpath
+/.project
+
+# Logs and runtime files
+*.log
+*.pid
+*.hprof
+hs_err_pid*
+replay_pid*
+
+# Operating systems
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~

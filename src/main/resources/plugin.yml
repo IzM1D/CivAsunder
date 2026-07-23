@@ -1,0 +1,36 @@
+name: CivAsunder
+version: 1.0.0-PROD
+main: io.lithcore.civasunder.CivAsunder
+api-version: '1.20'
+commands:
+  vein:
+    description: Управление жилами CivAsunder
+    permission: civ_asunder.admin
+  k:
+    description: Управление королевствами CivAsunder
+  convert:
+    description: Конвертация материи CivAsunder
+  register:
+    description: Регистрация аккаунта CivAsunder
+    permission: civ_asunder.user
+  login:
+    description: Авторизация аккаунта CivAsunder
+    permission: civ_asunder.user
+  civwl:
+    description: Управление белым списком CivAsunder
+  logout:
+    description: Выйти из аккаунта CivAsunder
+    permission: civ_asunder.user
+  escape:
+    description: Досрочно покинуть Чистилище
+    permission: civ_asunder.escape
+permissions:
+  civ_asunder.user:
+    description: Доступ к обычным командам CivAsunder
+    default: true
+  civ_asunder.admin:
+    description: Доступ к административным командам CivAsunder
+    default: op
+  civ_asunder.escape:
+    description: Досрочный выход оператора из Чистилища
+    default: op
