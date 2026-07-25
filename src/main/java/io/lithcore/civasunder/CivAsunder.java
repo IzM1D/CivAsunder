@@ -18,6 +18,9 @@ import io.lithcore.civasunder.listeners.VeinMiningListener;
 import io.lithcore.civasunder.listeners.SoulListener;
 import io.lithcore.civasunder.listeners.SoulAltarListener;
 import io.lithcore.civasunder.listeners.AuthListener;
+import io.lithcore.civasunder.listeners.ElytraBoostListener;
+import io.lithcore.civasunder.listeners.RaidLootListener;
+import io.lithcore.civasunder.listeners.VillagerTradeLockListener;
 import io.lithcore.civasunder.managers.KingdomManager;
 import io.lithcore.civasunder.managers.MatterManager;
 import io.lithcore.civasunder.managers.TownHallManager;
@@ -86,6 +89,9 @@ public class CivAsunder extends JavaPlugin {
         altarListener.registerAltarRecipe();
         Bukkit.getPluginManager().registerEvents(new AuthListener(this, authManager), this);
         Bukkit.getPluginManager().registerEvents(new CombatListener(combatManager), this);
+        Bukkit.getPluginManager().registerEvents(new ElytraBoostListener(), this);
+        Bukkit.getPluginManager().registerEvents(new VillagerTradeLockListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new RaidLootListener(), this);
         
 
         

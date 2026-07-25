@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(curl -s \"https://api.papermc.io/v2/projects/paper/versions/1.21.11\")",
+      "Bash(curl -s \"https://fill.papermc.io/v3/projects/paper\")",
+      "Bash(curl -s \"https://fill.papermc.io/v3/projects/paper/versions/26.1.2\")",
+      "Bash(curl -s \"https://repo.papermc.io/service/rest/v1/search?repository=maven-public&group=io.papermc.paper&name=paper-api&sort=version&direction=desc\")",
+      "Bash(curl -s \"https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/maven-metadata.xml\")",
+      "Bash(curl -sI \"https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/26.1.2.build.74-stable/paper-api-26.1.2.build.74-stable.pom\" -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s \"https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/26.1.2.build.74-stable/paper-api-26.1.2.build.74-stable.pom\")",
+      "Bash(curl -s \"https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/26.1.2.build.74-stable/paper-api-26.1.2.build.74-stable.module\")",
+      "Read(//c/Users/maxgu/.gradle/caches//**)",
+      "Read(//c/Users/maxgu/.gradle/**)",
+      "Bash(export JAVA_HOME=\"/c/Users/maxgu/.jdks/ms-25.0.3\")",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash(\"/c/Users/maxgu/.gradle/wrapper/dists/gradle-9.1.0-bin/9agqghryom9wkf8r80qlhnts3/gradle-9.1.0/bin/gradle\" compileJava)"
+    ]
+  }
+}

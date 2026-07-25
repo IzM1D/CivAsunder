@@ -85,6 +85,25 @@ public class SoulManager implements Listener {
 
     public World getSoulWorld() { return soulWorld; }
     public int getBaseSoulDuration() { return 300; }
+
+    /**
+     * Гарантирует, что точка спавна не окажется внутри блоков или в пустоте.
+     * Если у ног или головы блок не проходим — поднимаем на getHighestBlockYAt + 1.
+     */
+    public Location findSafeLocation(Location loc) {
+        if (loc == null || loc.getWorld() == null) return loc;
+        World world = loc.getWorld();
+        int maxY = world.getMaxHeight() - 2;
+        Location check = loc.clone();
+        while (check.getBlockY() <= maxY) {
+            org.bukkit.block.Block feet = check.getBlock();
+            org.bukkit.block.Block head = feet.getRelative(0, 1, 0);
+            if (feet.isPassable() && !feet.isLiquid() && head.isPassable() && !head.isLiquid()) return check;
+            check = check.clone().add(0, 1, 0);
+        }
+        return loc;
+    }
+
     public int getExtensionCost(int currentExtensions) { return (int) Math.pow(2, currentExtensions); }
     public long getExtensionDuration(int currentExtensions) {
         return getBaseSoulDuration() * (1L << currentExtensions);
@@ -136,9 +155,9 @@ public class SoulManager implements Listener {
                         p.setGameMode(org.bukkit.GameMode.SURVIVAL);
                         
                         org.bukkit.Location bedLoc = p.getRespawnLocation();
-                        if (bedLoc != null) { p.teleport(bedLoc); }
-                        else { p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()); }
-                        
+                        org.bukkit.Location target = bedLoc != null ? bedLoc : Bukkit.getWorlds().get(0).getSpawnLocation();
+                        p.teleport(findSafeLocation(target));
+
                         io.lithcore.civasunder.util.MessageUtil.sendJson(p, "{\"text\":\"[Души] Время заключения истекло! Вы возвращены на свою точку сохранения.\",\"color\":\"green\"}");
                     }
                     soulScoreboards.remove(victimUUID);
@@ -168,7 +187,7 @@ public class SoulManager implements Listener {
         Objective objective = scoreboard.registerNewObjective("soul_timer", "dummy", "§5§l« ЧИСТИЛИЩЕ »");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.getScore("§1").setScore(6);
-        objective.getScore("§7Творческая катока душ").setScore(5);
+        objective.getScore("§7Творческая каторга душ").setScore(5);
         objective.getScore("§2").setScore(4);
         objective.getScore("§fОсталось сидеть:").setScore(3);
         objective.getScore("§e").setScore(2);

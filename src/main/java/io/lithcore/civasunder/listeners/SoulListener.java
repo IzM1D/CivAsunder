@@ -164,8 +164,8 @@ public class SoulListener implements Listener {
                 targetPlayer.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 targetPlayer.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 org.bukkit.Location bedLoc = targetPlayer.getRespawnLocation();
-                if (bedLoc != null) { targetPlayer.teleport(bedLoc); }
-                else { targetPlayer.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()); }
+                org.bukkit.Location releaseTarget = bedLoc != null ? bedLoc : Bukkit.getWorlds().get(0).getSpawnLocation();
+                targetPlayer.teleport(soulManager.findSafeLocation(releaseTarget));
                 targetPlayer.setVelocity(new org.bukkit.util.Vector(0, 0, 0));
                 targetPlayer.setFallDistance(0.0f);
                 sendRaw(targetPlayer, "{\"text\":\"[Души] Ваша душа была освобождена! Вы воскрешены на главном спавне.\",\"color\":\"green\"}");
@@ -190,7 +190,7 @@ public class SoulListener implements Listener {
             
             // Безопасно перемещаем на спавн основного мира в следующем тике
             Bukkit.getScheduler().runTask(plugin, () -> {
-                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                player.teleport(soulManager.findSafeLocation(Bukkit.getWorlds().get(0).getSpawnLocation()));
                 sendRaw(player, "{\"text\":\"[Души] Пока вы были вне сети, ваша душа освободилась! Вы возвращены в реальный мир.\",\"color\":\"green\"}");
             });
             return;
@@ -267,8 +267,8 @@ public class SoulListener implements Listener {
                 p.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 
                 Location bedLoc = p.getRespawnLocation();
-                if (bedLoc != null) { p.teleport(bedLoc); }
-                else { p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation()); }
+                Location target = bedLoc != null ? bedLoc : Bukkit.getWorlds().get(0).getSpawnLocation();
+                p.teleport(soulManager.findSafeLocation(target));
                 
                 sendRaw(p, "{\"text\":\"" + message + "\",\"color\":\"green\"}");
             }

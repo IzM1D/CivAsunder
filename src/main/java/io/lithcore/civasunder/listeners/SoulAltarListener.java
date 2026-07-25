@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -91,6 +93,37 @@ public class SoulAltarListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onAltarCraft(CraftItemEvent event) {
+        ItemStack result = event.getRecipe().getResult();
+        if (result.getType() != Material.CRYING_OBSIDIAN || !result.hasItemMeta()) return;
+        if (!result.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "is_soul_altar"), PersistentDataType.BYTE)) return;
+
+        // Shift-click создаёт цикл крафтов с непредсказуемой матрицей — запрещаем, чтобы не потерять ресурсы игрока.
+        if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
+            event.setCancelled(true);
+            if (event.getWhoClicked() instanceof Player p) {
+                sendRaw(p, "{\"text\":\"[Алтарь] Крафт по одному: Shift-крафт запрещён для Алтаря Заточения.\",\"color\":\"red\"}");
+            }
+            return;
+        }
+
+        // Vanilla снимет по 1 осколку из каждой позиции. Досписываем ещё по 3, чтобы всего вышло 32 (4 × 8 углов).
+        CraftingInventory inv = event.getInventory();
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            ItemStack[] matrix = inv.getMatrix();
+            for (int i = 0; i < matrix.length; i++) {
+                if (i == 4) continue;
+                ItemStack item = matrix[i];
+                if (item == null || item.getType() != Material.AMETHYST_SHARD) continue;
+                int amt = item.getAmount();
+                if (amt <= 3) { matrix[i] = null; }
+                else { item.setAmount(amt - 3); }
+            }
+            inv.setMatrix(matrix);
+        });
     }
 
     @EventHandler

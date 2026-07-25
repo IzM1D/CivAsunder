@@ -214,8 +214,13 @@ public class AuthManager {
         if (inventoryCache.containsKey(uuid)) { player.getInventory().setContents(inventoryCache.remove(uuid)); }
         if (armorCache.containsKey(uuid)) { player.getInventory().setArmorContents(armorCache.remove(uuid)); }
         
-        // ТЗ: Возвращаем человека ровно туда, где он находился, со всей статистикой
-        if (locationCache.containsKey(uuid)) { player.teleport(locationCache.remove(uuid)); }
+        // ТЗ: Возвращаем человека ровно туда, где он находился, со всей статистикой.
+        // Если сохранённая точка оказалась в блоке (мир изменился / regenerate / загрузка чанков) — поднимаем на первый свободный Y.
+        if (locationCache.containsKey(uuid)) {
+            org.bukkit.Location cached = locationCache.remove(uuid);
+            SoulManager sm = plugin.getSoulManager();
+            player.teleport(sm != null ? sm.findSafeLocation(cached) : cached);
+        }
         if (healthCache.containsKey(uuid)) { player.setHealth(healthCache.remove(uuid)); }
         if (foodCache.containsKey(uuid)) { player.setFoodLevel(foodCache.remove(uuid)); }
         if (expCache.containsKey(uuid)) { player.setExp(expCache.remove(uuid)); }
