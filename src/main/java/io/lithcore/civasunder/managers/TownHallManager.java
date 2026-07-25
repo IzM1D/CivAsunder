@@ -37,7 +37,7 @@ public class TownHallManager {
         this.plugin = plugin;
     }
 
-    public void registerTownHallRecipe() {
+    public org.bukkit.inventory.ItemStack createTownHallItem() {
         org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(org.bukkit.Material.CARTOGRAPHY_TABLE);
         org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -47,6 +47,11 @@ public class TownHallManager {
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
+        return item;
+    }
+
+    public void registerTownHallRecipe() {
+        org.bukkit.inventory.ItemStack item = createTownHallItem();
         org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey(plugin, "town_hall_core_block");
         org.bukkit.inventory.ShapedRecipe recipe = new org.bukkit.inventory.ShapedRecipe(key, item);
         recipe.shape("GGG", "GTE", "GGG");

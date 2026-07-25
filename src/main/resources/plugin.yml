@@ -10,6 +10,7 @@ commands:
     description: Управление королевствами CivAsunder
   convert:
     description: Конвертация материи CivAsunder
+    permission: civ_asunder.admin
   register:
     description: Регистрация аккаунта CivAsunder
     permission: civ_asunder.user

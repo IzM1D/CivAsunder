@@ -36,7 +36,7 @@ public class KingdomManager {
         loadKingdomsFromFile();
     }
 
-    public void registerKingdomRecipe() {
+    public org.bukkit.inventory.ItemStack createKingdomBlockItem() {
         org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(org.bukkit.Material.FLETCHING_TABLE);
         org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -46,7 +46,11 @@ public class KingdomManager {
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
+        return item;
+    }
 
+    public void registerKingdomRecipe() {
+        org.bukkit.inventory.ItemStack item = createKingdomBlockItem();
         org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey(plugin, "kingdom_core_block");
         org.bukkit.inventory.ShapedRecipe recipe = new org.bukkit.inventory.ShapedRecipe(key, item);
         recipe.shape("GGG", "GTG", "GGG");

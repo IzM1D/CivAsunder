@@ -11,6 +11,7 @@ import io.lithcore.civasunder.commands.CivAsunderCommand;
 import io.lithcore.civasunder.commands.EscapeCommand;
 import io.lithcore.civasunder.listeners.CompassRadarListener;
 import io.lithcore.civasunder.listeners.KingdomBlockListener;
+import io.lithcore.civasunder.listeners.MatterConverterListener;
 import io.lithcore.civasunder.listeners.OrePreventionListener;
 import io.lithcore.civasunder.listeners.TownHallListener;
 import io.lithcore.civasunder.listeners.TownHallProtectionListener;
@@ -19,6 +20,7 @@ import io.lithcore.civasunder.listeners.SoulListener;
 import io.lithcore.civasunder.listeners.SoulAltarListener;
 import io.lithcore.civasunder.listeners.AuthListener;
 import io.lithcore.civasunder.listeners.ElytraBoostListener;
+import io.lithcore.civasunder.listeners.IronGolemSpawnListener;
 import io.lithcore.civasunder.listeners.RaidLootListener;
 import io.lithcore.civasunder.listeners.VillagerTradeLockListener;
 import io.lithcore.civasunder.managers.KingdomManager;
@@ -57,6 +59,8 @@ public class CivAsunder extends JavaPlugin {
         this.kingdomManager = new KingdomManager(this);
         this.kingdomManager.registerKingdomRecipe();
         this.matterManager = new MatterManager(this);
+        MatterConverterListener matterConverterListener = new MatterConverterListener(this, matterManager);
+        matterConverterListener.registerRecipe();
         
         this.townHallManager = new TownHallManager(this);
         this.townHallManager.registerTownHallRecipe();
@@ -90,6 +94,8 @@ public class CivAsunder extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AuthListener(this, authManager), this);
         Bukkit.getPluginManager().registerEvents(new CombatListener(combatManager), this);
         Bukkit.getPluginManager().registerEvents(new ElytraBoostListener(), this);
+        Bukkit.getPluginManager().registerEvents(new IronGolemSpawnListener(), this);
+        Bukkit.getPluginManager().registerEvents(matterConverterListener, this);
         Bukkit.getPluginManager().registerEvents(new VillagerTradeLockListener(this), this);
         Bukkit.getPluginManager().registerEvents(new RaidLootListener(), this);
         
@@ -121,7 +127,8 @@ public class CivAsunder extends JavaPlugin {
             commandMap.register("civasunder", new CivAsunderCommand("vein", new VeinCommand(veinManager),
                     "civ_asunder.admin"));
             commandMap.register("civasunder", new CivAsunderCommand("k", new KingdomCommand(kingdomManager, kingdomBlockListener)));
-            commandMap.register("civasunder", new CivAsunderCommand("convert", new ConvertCommand(this, matterManager)));
+            commandMap.register("civasunder", new CivAsunderCommand("convert", new ConvertCommand(this, matterManager),
+                    "civ_asunder.admin"));
             commandMap.register("civasunder", new CivAsunderCommand("register", regCmd));
             commandMap.register("civasunder", new CivAsunderCommand("login", logCmd));
             commandMap.register("civasunder", new CivAsunderCommand("civwl", wlCmd));
@@ -142,6 +149,7 @@ public class CivAsunder extends JavaPlugin {
     public void onDisable() {
         if (veinManager != null) veinManager.cleanUp();
         if (kingdomManager != null) kingdomManager.cleanUp();
+        if (matterManager != null) matterManager.saveData();
         if (townHallManager != null) townHallManager.saveData();
         if (soulManager != null) soulManager.saveData();
         if (authManager != null) authManager.flushSaves();

@@ -3,7 +3,6 @@ package io.lithcore.civasunder.commands;
 import io.lithcore.civasunder.CivAsunder;
 import io.lithcore.civasunder.managers.MatterManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -13,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConvertCommand implements CommandExecutor {
 
@@ -34,6 +31,11 @@ public class ConvertCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        if (!player.isOp()) {
+            sendRawMessage(player, "{\"text\":\"[Конвертер] Команда /convert доступна только операторам сервера.\",\"color\":\"red\"}");
+            return true;
+        }
+
         ItemStack item = player.getInventory().getItemInMainHand();
         
         if (item == null || item.getType() == Material.AIR) {
@@ -77,18 +79,7 @@ public class ConvertCommand implements CommandExecutor {
         item.setAmount(item.getAmount() - itemsToConsume);
         player.getInventory().setItemInMainHand(item);
 
-        ItemStack matterItem = new ItemStack(Material.AMETHYST_SHARD, statusCodeOrMatter);
-        ItemMeta meta = matterItem.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Эссенция Материи");
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Универсальная концентрированная валюта.");
-            lore.add(ChatColor.DARK_PURPLE + "Извлечено из утилизированных ресурсов.");
-            meta.setLore(lore);
-            
-            meta.getPersistentDataContainer().set(matterCurrencyKey, PersistentDataType.BYTE, (byte) 1);
-            matterItem.setItemMeta(meta);
-        }
+        ItemStack matterItem = matterManager.createMatterItem(statusCodeOrMatter);
 
         player.getInventory().addItem(matterItem);
         

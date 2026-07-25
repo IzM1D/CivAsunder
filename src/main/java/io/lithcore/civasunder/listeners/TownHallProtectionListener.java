@@ -96,6 +96,10 @@ public class TownHallProtectionListener implements Listener {
 
             if ((block.getType() == Material.CARTOGRAPHY_TABLE || block.getType() == Material.FLETCHING_TABLE) 
                     && townHallManager.getTownHalls().containsKey(loc)) {
+                if (event.isDropItems()) {
+                    event.setDropItems(false);
+                    loc.getWorld().dropItemNaturally(loc, townHallManager.createTownHallItem());
+                }
                 townHallManager.removeTownHall(loc);
                 sendRaw(player, "{\"text\":\"[Ратуша] Вы добровольно демонтировали Ратушу вашего города!\",\"color\":\"yellow\"}");
             }

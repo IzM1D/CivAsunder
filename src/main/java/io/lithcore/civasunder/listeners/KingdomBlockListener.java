@@ -57,7 +57,7 @@ public class KingdomBlockListener implements Listener {
         io.lithcore.civasunder.util.MessageUtil.sendJson(player, json);
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onKingdomBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         if (block.getType() != Material.FLETCHING_TABLE) {
@@ -65,8 +65,15 @@ public class KingdomBlockListener implements Listener {
         }
 
         Location loc = block.getLocation();
+        boolean isTrackedSetupBlock = setupSessions.values().removeIf(loc::equals);
+        boolean isRegisteredKingdomBlock = kingdomManager.getBlockLocations().containsKey(loc);
+        if ((isTrackedSetupBlock || isRegisteredKingdomBlock) && event.isDropItems()) {
+            event.setDropItems(false);
+            loc.getWorld().dropItemNaturally(loc, kingdomManager.createKingdomBlockItem());
+        }
+
         // Если блок Сердца уничтожен (кем угодно по вашему ТЗ) — государство полностью ликвидируется
-        if (kingdomManager.getBlockLocations().containsKey(loc)) {
+        if (isRegisteredKingdomBlock) {
             String kingdomKey = kingdomManager.getBlockLocations().remove(loc);
             KingdomManager.KingdomData data = kingdomManager.getKingdoms().remove(kingdomKey);
             kingdomManager.saveKingdomsToFile();
