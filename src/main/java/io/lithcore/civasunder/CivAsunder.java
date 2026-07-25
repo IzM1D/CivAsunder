@@ -31,6 +31,7 @@ import io.lithcore.civasunder.managers.SoulManager;
 import io.lithcore.civasunder.managers.AuthManager;
 import io.lithcore.civasunder.managers.CombatManager;
 import io.lithcore.civasunder.listeners.CombatListener;
+import io.lithcore.civasunder.listeners.CustomArrowListener;
 import io.lithcore.civasunder.util.AsyncFileWriter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -93,6 +94,9 @@ public class CivAsunder extends JavaPlugin {
         altarListener.registerAltarRecipe();
         Bukkit.getPluginManager().registerEvents(new AuthListener(this, authManager), this);
         Bukkit.getPluginManager().registerEvents(new CombatListener(combatManager), this);
+        CustomArrowListener customArrowListener = new CustomArrowListener(this, combatManager);
+        Bukkit.getPluginManager().registerEvents(customArrowListener, this);
+        customArrowListener.registerRecipes();
         Bukkit.getPluginManager().registerEvents(new ElytraBoostListener(), this);
         Bukkit.getPluginManager().registerEvents(new IronGolemSpawnListener(), this);
         Bukkit.getPluginManager().registerEvents(matterConverterListener, this);
