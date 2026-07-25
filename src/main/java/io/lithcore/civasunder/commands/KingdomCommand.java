@@ -31,7 +31,7 @@ public class KingdomCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-            sendRawMessage(player, "{\"text\":\"Помощь: /k [create|invite|accept|kick|rank|list|info|transfer]\",\"color\":\"yellow\"}");
+            sendHelp(player, args.length >= 2 ? args[1].toLowerCase() : null);
             return true;
         }
         String sub = args[0].toLowerCase();
@@ -269,8 +269,77 @@ public class KingdomCommand implements CommandExecutor, TabCompleter {
             for (String sub : subCommands) {
                 if (sub.startsWith(currentInput)) completions.add(sub);
             }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
+            String currentInput = args[1].toLowerCase();
+            String[] helpTopics = {"create", "invite", "accept", "kick", "rank", "list", "info", "transfer", "leave"};
+            for (String topic : helpTopics) {
+                if (topic.startsWith(currentInput)) completions.add(topic);
+            }
         }
         return completions;
+    }
+
+    private void sendHelp(Player player, String topic) {
+        if (topic != null) {
+            sendHelpTopic(player, topic);
+            return;
+        }
+
+        sendRawMessage(player, "{\"text\":\"======== /k help ========\",\"color\":\"gold\",\"bold\":true}");
+        sendRawMessage(player, "{\"text\":\"TL;DR: поставьте Блок Сердца Государства, затем /k create <название>. Управление страной идёт через уровни близости 1-100.\",\"color\":\"yellow\"}");
+        sendRawMessage(player, "[{\"text\":\"/k create <название>\",\"color\":\"aqua\"},{\"text\":\" — создать государство после установки Сердца.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k invite <ник>\",\"color\":\"aqua\"},{\"text\":\" — пригласить игрока. Нужно быть королём или иметь уровень выше 1.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k accept\", \"color\":\"aqua\"},{\"text\":\" — принять активное приглашение.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k kick <ник>\",\"color\":\"aqua\"},{\"text\":\" — выгнать участника с уровнем ниже вашего.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k rank <ник> <1-100>\",\"color\":\"aqua\"},{\"text\":\" — изменить уровень участника ниже вашего уровня.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k transfer <ник>\",\"color\":\"aqua\"},{\"text\":\" — передать корону участнику онлайн.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k leave <название>\",\"color\":\"aqua\"},{\"text\":\" — покинуть государство. Король сначала должен передать корону.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "[{\"text\":\"/k list\", \"color\":\"aqua\"},{\"text\":\" и \",\"color\":\"gray\"},{\"text\":\"/k info <название>\",\"color\":\"aqua\"},{\"text\":\" — просмотр стран и участников.\",\"color\":\"gray\"}]");
+        sendRawMessage(player, "{\"text\":\"Подробности: /k help <create|invite|accept|kick|rank|transfer|leave|list|info>\",\"color\":\"dark_gray\"}");
+    }
+
+    private void sendHelpTopic(Player player, String topic) {
+        switch (topic) {
+            case "create" -> {
+                sendRawMessage(player, "{\"text\":\"/k create <название>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Создаёт государство на месте только что установленного Блока Сердца Государства. Название очищается от спецсимволов.\",\"color\":\"gray\"}");
+            }
+            case "invite" -> {
+                sendRawMessage(player, "{\"text\":\"/k invite <ник>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Отправляет приглашение онлайн-игроку. Доступно королю и участникам с уровнем близости выше 1.\",\"color\":\"gray\"}");
+            }
+            case "accept" -> {
+                sendRawMessage(player, "{\"text\":\"/k accept\", \"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Принимает последнее активное приглашение и добавляет вас в государство с уровнем близости 1.\",\"color\":\"gray\"}");
+            }
+            case "kick" -> {
+                sendRawMessage(player, "{\"text\":\"/k kick <ник>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Исключает участника. Ваш уровень близости должен быть строго выше уровня цели; короля выгнать нельзя.\",\"color\":\"gray\"}");
+            }
+            case "rank" -> {
+                sendRawMessage(player, "{\"text\":\"/k rank <ник> <уровень_1-100>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Меняет уровень близости участника. Новый уровень должен быть ниже вашего, цель тоже должна быть ниже вас.\",\"color\":\"gray\"}");
+            }
+            case "transfer" -> {
+                sendRawMessage(player, "{\"text\":\"/k transfer <ник>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Передаёт корону онлайн-участнику вашего государства. Старый король остаётся с уровнем 99.\",\"color\":\"gray\"}");
+            }
+            case "leave" -> {
+                sendRawMessage(player, "{\"text\":\"/k leave <название_государства>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Позволяет обычному участнику покинуть государство. Король должен сначала использовать /k transfer или сломать Сердце.\",\"color\":\"gray\"}");
+            }
+            case "list" -> {
+                sendRawMessage(player, "{\"text\":\"/k list\", \"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Показывает список существующих государств.\",\"color\":\"gray\"}");
+            }
+            case "info" -> {
+                sendRawMessage(player, "{\"text\":\"/k info <название>\",\"color\":\"gold\",\"bold\":true}");
+                sendRawMessage(player, "{\"text\":\"Показывает участников государства и их уровни близости.\",\"color\":\"gray\"}");
+            }
+            default -> {
+                sendRawMessage(player, "{\"text\":\"Неизвестный раздел справки. Используйте: /k help <create|invite|accept|kick|rank|transfer|leave|list|info>\",\"color\":\"red\"}");
+            }
+        }
     }
 
     private void sendRawMessage(Player player, String json) {
