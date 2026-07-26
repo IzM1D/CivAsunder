@@ -91,7 +91,7 @@ public class CombatListener implements Listener {
             Vector leftInertia = new Vector(attackerDir.getZ(), 0.1, -attackerDir.getX()).normalize().multiply(0.5);
 
             victim.getWorld().spawnParticle(Particle.LAVA, hitLoc, 0, leftInertia.getX(), leftInertia.getY(), leftInertia.getZ(), 1.0);
-            victim.getWorld().spawnParticle(Particle.CRIT_MAGIC, hitLoc, 15, 0.2, 0.2, 0.2, 0.2);
+            victim.getWorld().spawnParticle(Particle.ENCHANTED_HIT, hitLoc, 15, 0.2, 0.2, 0.2, 0.2);
             victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 0.6f);
             return;
         }
@@ -111,7 +111,7 @@ public class CombatListener implements Listener {
                     combatManager.setBlocking(victim, false);
                     
                     victim.getWorld().playSound(victim.getLocation(), Sound.ITEM_SHIELD_BREAK, 1.3f, 0.6f);
-                    victim.getWorld().spawnParticle(Particle.SMOKE_NORMAL, victim.getLocation().add(0, 1, 0), 30, 0.3, 0.5, 0.3, 0.05);
+                    victim.getWorld().spawnParticle(Particle.SMOKE, victim.getLocation().add(0, 1, 0), 30, 0.3, 0.5, 0.3, 0.05);
                 } else {
                     combatManager.lockCriticalStrikes(attacker, 3000L);
                     combatManager.grantCounterAttack(victim, 1500L);
@@ -133,7 +133,7 @@ public class CombatListener implements Listener {
         if (isCritAttempt) {
             if (combatManager.isCriticalStrikesLocked(attacker)) {
                 event.setDamage(event.getDamage() / 1.5);
-                attacker.getWorld().spawnParticle(Particle.SMOKE_NORMAL, attacker.getLocation().add(0, 1, 0), 12, 0.2, 0.2, 0.2, 0.01);
+                attacker.getWorld().spawnParticle(Particle.SMOKE, attacker.getLocation().add(0, 1, 0), 12, 0.2, 0.2, 0.2, 0.01);
                 attacker.getWorld().playSound(attacker.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.5f, 1.5f);
             }
         }
@@ -144,7 +144,7 @@ public class CombatListener implements Listener {
             
             attacker.getWorld().playSound(attacker.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.2f, 0.7f);
             attacker.getWorld().playSound(attacker.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.4f, 2.0f);
-            attacker.getWorld().spawnParticle(Particle.CRIT_MAGIC, attacker.getLocation().add(0, 1, 0), 25, 0.4, 0.4, 0.4, 0.5);
+            attacker.getWorld().spawnParticle(Particle.ENCHANTED_HIT, attacker.getLocation().add(0, 1, 0), 25, 0.4, 0.4, 0.4, 0.5);
         }
     }
 

@@ -170,7 +170,7 @@ public class CombatManager {
                             setBlocking(player, false);
                             
                             player.getWorld().playSound(player.getLocation(), org.bukkit.Sound.ITEM_SHIELD_BREAK, 1.3f, 0.6f);
-                            player.getWorld().spawnParticle(org.bukkit.Particle.SMOKE_NORMAL, player.getLocation().add(0, 1, 0), 30, 0.3, 0.5, 0.3, 0.05);
+                            player.getWorld().spawnParticle(org.bukkit.Particle.SMOKE, player.getLocation().add(0, 1, 0), 30, 0.3, 0.5, 0.3, 0.05);
                             continue;
                         }
                     }
@@ -198,7 +198,7 @@ public class CombatManager {
                         counterAttackTimers.remove(uuid, counterExpire);
                     }
                     if (criticalLocked || shieldLocked) {
-                        player.getWorld().spawnParticle(org.bukkit.Particle.TOWN_AURA, player.getLocation().add(0, 1.0, 0), 2, 0.2, 0.4, 0.2, 0.01);
+                        player.getWorld().spawnParticle(org.bukkit.Particle.MYCELIUM, player.getLocation().add(0, 1.0, 0), 2, 0.2, 0.4, 0.2, 0.01);
                     }
                     if (getFatigue(player) <= 0.0 && !blockingPlayers.containsKey(uuid)
                             && !shieldBreakTimers.containsKey(uuid) && !critLockTimers.containsKey(uuid)) {

@@ -1,7 +1,7 @@
 name: CivAsunder
 version: 1.0.0-PROD
 main: io.lithcore.civasunder.CivAsunder
-api-version: '1.20'
+api-version: '1.21'
 commands:
   vein:
     description: Управление жилами CivAsunder

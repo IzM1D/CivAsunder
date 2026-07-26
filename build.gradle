@@ -14,21 +14,21 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:26.1.2.build.74-stable'
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.release = 17
+    options.release = 25
 }
 
 tasks.named('jar') {
-    archiveFileName = 'CivAsunder-1.0.0-java17.jar'
+    archiveFileName = 'CivAsunder-1.0.0-java25.jar'
 }
 

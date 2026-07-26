@@ -315,7 +315,7 @@ public class SoulListener implements Listener {
                         if (targetUUIDStr != null) {
                             UUID targetUUID = UUID.fromString(targetUUIDStr);
                             // Эффект рассеивания дымом
-                            itemEntity.getWorld().spawnParticle(org.bukkit.Particle.SMOKE_LARGE, itemEntity.getLocation(), 20, 0.2, 0.2, 0.2, 0.0);
+                            itemEntity.getWorld().spawnParticle(org.bukkit.Particle.LARGE_SMOKE, itemEntity.getLocation(), 20, 0.2, 0.2, 0.2, 0.0);
 itemEntity.remove();
                             processItemDestruction(targetUUID, "[Души] Предмет вашей души окончательно сгорел в лаве! Вы свободны.");
                             
